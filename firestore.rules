@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn() && request.auth.token.email != null
+        && request.auth.token.email == "ram.bhai@example.com";
+    }
+
+    // Buyer/seller requests: authenticated users can create their own request.
+    // Only the admin can read, update or delete requests.
+    match /requests/{requestId} {
+      allow create: if signedIn() && request.resource.data.userUid == request.auth.uid;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Property inventory is private. Clients may read only the minimum fields used
+    // for availability; the UI never displays private notes/address/price.
+    match /properties/{propertyId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /adminSettings/{docId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Optional client profile document.
+    match /users/{uid} {
+      allow create, update: if signedIn() && request.auth.uid == uid;
+      allow read: if signedIn() && request.auth.uid == uid || isAdmin();
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

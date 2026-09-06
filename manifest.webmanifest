@@ -1,0 +1,10 @@
+{
+  "name":"Real Estate Agent Ram Bhai",
+  "short_name":"Ram Bhai Real Estate V10",
+  "start_url":"./",
+  "display":"fullscreen",
+  "background_color":"#f5f1ea",
+  "theme_color":"#092f5d",
+  "description":"Ram Bhai Rawal - Buy, Sell & Property Assistance in Sheoganj-Sumerpur, Sirohi, Rajasthan.",
+  "icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icon-512.png","sizes":"512x512","type":"image/png"}]
+}
